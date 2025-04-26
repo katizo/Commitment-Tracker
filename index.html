@@ -1,33 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Commitment Tracker</title>
+<div id="commitmentTracker">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
 
-    body {
+    #commitmentTracker {
       font-family: 'Cairo', sans-serif;
       direction: rtl;
       padding: 20px;
       text-align: center;
       color: white;
-      margin: 0;
       background: none;
     }
 
-    body.dark-mode {
-      background-color: #121212;
-    }
-
-    h2 {
-      margin-bottom: 20px;
-      color: #fff;
-      text-shadow: 1px 1px 2px #000;
-      font-size: 24px;
-    }
-
-    .card {
+    #commitmentTracker .card {
       background-color: rgba(255, 255, 255, 0.2);
       border-radius: 12px;
       backdrop-filter: blur(8px);
@@ -38,14 +22,25 @@
       position: relative;
     }
 
-    .unit {
+    #commitmentTracker .card.dark-mode {
+      background-color: #121212;
+    }
+
+    #commitmentTracker h2 {
+      margin-bottom: 20px;
+      color: #fff;
+      text-shadow: 1px 1px 2px #000;
+      font-size: 24px;
+    }
+
+    #commitmentTracker .unit {
       background-color: rgba(255, 255, 255, 0.2);
       border-radius: 10px;
       padding: 14px 12px;
       margin-bottom: 14px;
     }
 
-    .label {
+    #commitmentTracker .label {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -54,11 +49,11 @@
       margin-bottom: 10px;
     }
 
-    .label .icon {
+    #commitmentTracker .label .icon {
       font-size: 20px;
     }
 
-    .bar {
+    #commitmentTracker .bar {
       width: 100%;
       height: 22px;
       background-color: rgba(255, 255, 255, 0.2);
@@ -66,30 +61,18 @@
       overflow: hidden;
     }
 
-    .fill {
+    #commitmentTracker .fill {
       height: 100%;
       transition: width 0.3s ease;
     }
 
-    .month-fill { background-color: #524e4e; }
-    .day-fill   { background-color: #66BB6A; }
-    .hour-fill  { background-color: #42A5F5; }
-    .minute-fill{ background-color: #EF5350; }
-    .second-fill{ background-color: #FDD835; }
+    #commitmentTracker .month-fill { background-color: #524e4e; }
+    #commitmentTracker .day-fill   { background-color: #66BB6A; }
+    #commitmentTracker .hour-fill  { background-color: #42A5F5; }
+    #commitmentTracker .minute-fill{ background-color: #EF5350; }
+    #commitmentTracker .second-fill{ background-color: #FDD835; }
 
-    .card::before {
-      content: "";
-      background: rgba(0, 0, 0, 0.2);
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: -1;
-      border-radius: 12px;
-    }
-
-    .settings-icons {
+    #commitmentTracker .settings-icons {
       position: absolute;
       top: 10px;
       left: 10px;
@@ -97,13 +80,13 @@
       gap: 10px;
     }
 
-    .settings-icons i {
+    #commitmentTracker .settings-icons i {
       font-size: 20px;
       cursor: pointer;
       color: #fff;
     }
 
-    .settings-panel {
+    #commitmentTracker .settings-panel {
       display: none;
       background-color: rgba(0, 0, 0, 0.4);
       border-radius: 10px;
@@ -111,7 +94,7 @@
       margin-top: 10px;
     }
 
-    .years-display {
+    #commitmentTracker .years-display {
       background-color: rgba(255, 255, 255, 0.2);
       padding: 10px 20px;
       border-radius: 10px;
@@ -122,11 +105,7 @@
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
 
-    .settings-panel input {
-      margin-bottom: 8px;
-    }
-
-    button {
+    #commitmentTracker button {
       padding: 6px 12px;
       margin-top: 5px;
       background-color: #ffffff33;
@@ -136,17 +115,16 @@
       cursor: pointer;
     }
 
-    button:hover {
+    #commitmentTracker button:hover {
       background-color: #ffffff55;
     }
   </style>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-</head>
-<body>
+
   <h2>Commitment Tracker</h2>
 
-  <div class="card">
+  <div class="card" id="trackerCard">
     <div class="settings-icons">
       <i class="fas fa-cog" onclick="toggleSettings()"></i>
       <i class="fas fa-moon" id="darkModeIcon" onclick="toggleDarkMode()"></i>
@@ -270,9 +248,10 @@
     }
 
     function toggleDarkMode() {
-      document.body.classList.toggle('dark-mode');
+      const card = document.getElementById("trackerCard");
+      card.classList.toggle('dark-mode');
       const icon = document.getElementById("darkModeIcon");
-      if (document.body.classList.contains('dark-mode')) {
+      if (card.classList.contains('dark-mode')) {
         icon.classList.remove('fa-moon');
         icon.classList.add('fa-sun');
       } else {
@@ -284,5 +263,4 @@
     setInterval(updateCounter, 1000);
     updateCounter();
   </script>
-</body>
-</html>
+</div>
