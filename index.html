@@ -8,11 +8,18 @@
       padding: 20px;
       text-align: center;
       color: white;
-      background: none;
+      margin: 0;
+    }
+
+    #commitmentTracker h2 {
+      margin-bottom: 20px;
+      color: #fff;
+      text-shadow: 1px 1px 2px #000;
+      font-size: 24px;
     }
 
     #commitmentTracker .card {
-      background-color: rgba(255, 255, 255, 0.2);
+      background-color: #ffffffcc; /* أبيض شبه شفاف */
       border-radius: 12px;
       backdrop-filter: blur(8px);
       padding: 15px;
@@ -23,14 +30,7 @@
     }
 
     #commitmentTracker .card.dark-mode {
-      background-color: #121212;
-    }
-
-    #commitmentTracker h2 {
-      margin-bottom: 20px;
-      color: #fff;
-      text-shadow: 1px 1px 2px #000;
-      font-size: 24px;
+      background-color: #121212; /* خلفية غامقة للوضع الليلي */
     }
 
     #commitmentTracker .unit {
@@ -72,18 +72,13 @@
     #commitmentTracker .minute-fill{ background-color: #EF5350; }
     #commitmentTracker .second-fill{ background-color: #FDD835; }
 
-    #commitmentTracker .settings-icons {
+    #commitmentTracker .settings-icon {
       position: absolute;
       top: 10px;
       left: 10px;
-      display: flex;
-      gap: 10px;
-    }
-
-    #commitmentTracker .settings-icons i {
       font-size: 20px;
       cursor: pointer;
-      color: #fff;
+      color: #000;
     }
 
     #commitmentTracker .settings-panel {
@@ -105,6 +100,10 @@
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
 
+    #commitmentTracker .settings-panel input {
+      margin-bottom: 8px;
+    }
+
     #commitmentTracker button {
       padding: 6px 12px;
       margin-top: 5px;
@@ -120,14 +119,11 @@
     }
   </style>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
   <h2>Commitment Tracker</h2>
 
   <div class="card" id="trackerCard">
-    <div class="settings-icons">
-      <i class="fas fa-cog" onclick="toggleSettings()"></i>
-      <i class="fas fa-moon" id="darkModeIcon" onclick="toggleDarkMode()"></i>
+    <div class="settings-icon" onclick="toggleSettings()">
+      <i class="fas fa-cog"></i>
     </div>
 
     <div class="settings-panel" id="settingsPanel">
@@ -135,6 +131,7 @@
       <br />
       <button onclick="setCustomStart()">Set Start</button>
       <button onclick="resetStart()">Reset</button>
+      <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
     </div>
 
     <div class="years-display" id="yearsDisplay">👏👏 0 Years 👏👏</div>
@@ -175,6 +172,7 @@
     </div>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
   <script>
     let start = localStorage.getItem("startDate");
     if (!start) {
@@ -249,15 +247,7 @@
 
     function toggleDarkMode() {
       const card = document.getElementById("trackerCard");
-      card.classList.toggle('dark-mode');
-      const icon = document.getElementById("darkModeIcon");
-      if (card.classList.contains('dark-mode')) {
-        icon.classList.remove('fa-moon');
-        icon.classList.add('fa-sun');
-      } else {
-        icon.classList.remove('fa-sun');
-        icon.classList.add('fa-moon');
-      }
+      card.classList.toggle("dark-mode");
     }
 
     setInterval(updateCounter, 1000);
