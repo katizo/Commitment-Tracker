@@ -1,46 +1,51 @@
-<div id="commitmentTracker">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Commitment Tracker</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
 
-    #commitmentTracker {
+    .tracker-card {
       font-family: 'Cairo', sans-serif;
       direction: rtl;
       padding: 20px;
       text-align: center;
-      color: white;
+      color: #333;
       margin: 0;
+      background-color: #f9f9f9;
+      border-radius: 15px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      transition: all 0.3s ease;
     }
 
-    #commitmentTracker h2 {
+    .tracker-card.dark-mode {
+      background-color: #222;
+      color: white;
+      box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+    }
+
+    h2 {
       margin-bottom: 20px;
-      color: #fff;
-      text-shadow: 1px 1px 2px #000;
       font-size: 24px;
     }
 
-    #commitmentTracker .card {
-      background-color: #ffffffcc; /* أبيض شبه شفاف */
-      border-radius: 12px;
-      backdrop-filter: blur(8px);
-      padding: 15px;
-      max-width: 380px;
-      margin: auto;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      position: relative;
-    }
-
-    #commitmentTracker .card.dark-mode {
-      background-color: #121212; /* خلفية غامقة للوضع الليلي */
-    }
-
-    #commitmentTracker .unit {
-      background-color: rgba(255, 255, 255, 0.2);
+    .unit {
+      background-color: rgba(255, 255, 255, 0.4);
       border-radius: 10px;
       padding: 14px 12px;
       margin-bottom: 14px;
+      transition: background-color 0.3s ease;
     }
 
-    #commitmentTracker .label {
+    .tracker-card.dark-mode .unit {
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .label {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -49,48 +54,35 @@
       margin-bottom: 10px;
     }
 
-    #commitmentTracker .label .icon {
+    .label .icon {
       font-size: 20px;
     }
 
-    #commitmentTracker .bar {
+    .bar {
       width: 100%;
       height: 22px;
-      background-color: rgba(255, 255, 255, 0.2);
+      background-color: rgba(0, 0, 0, 0.1);
       border-radius: 10px;
       overflow: hidden;
     }
 
-    #commitmentTracker .fill {
+    .tracker-card.dark-mode .bar {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .fill {
       height: 100%;
       transition: width 0.3s ease;
     }
 
-    #commitmentTracker .month-fill { background-color: #524e4e; }
-    #commitmentTracker .day-fill   { background-color: #66BB6A; }
-    #commitmentTracker .hour-fill  { background-color: #42A5F5; }
-    #commitmentTracker .minute-fill{ background-color: #EF5350; }
-    #commitmentTracker .second-fill{ background-color: #FDD835; }
+    .month-fill { background-color: #524e4e; }
+    .day-fill   { background-color: #66BB6A; }
+    .hour-fill  { background-color: #42A5F5; }
+    .minute-fill{ background-color: #EF5350; }
+    .second-fill{ background-color: #FDD835; }
 
-    #commitmentTracker .settings-icon {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      font-size: 20px;
-      cursor: pointer;
-      color: #000;
-    }
-
-    #commitmentTracker .settings-panel {
-      display: none;
-      background-color: rgba(0, 0, 0, 0.4);
-      border-radius: 10px;
-      padding: 10px;
-      margin-top: 10px;
-    }
-
-    #commitmentTracker .years-display {
-      background-color: rgba(255, 255, 255, 0.2);
+    .years-display {
+      background-color: rgba(255, 255, 255, 0.4);
       padding: 10px 20px;
       border-radius: 10px;
       font-size: 20px;
@@ -98,159 +90,144 @@
       margin-bottom: 15px;
       backdrop-filter: blur(8px);
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
     }
 
-    #commitmentTracker .settings-panel input {
-      margin-bottom: 8px;
+    .tracker-card.dark-mode .years-display {
+      background-color: rgba(0, 0, 0, 0.4);
     }
 
-    #commitmentTracker button {
-      padding: 6px 12px;
-      margin-top: 5px;
-      background-color: #ffffff33;
-      border: none;
-      border-radius: 6px;
-      color: white;
+    .settings-panel {
+      background-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .toggle-dark {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: none;
+      border: 2px solid #333;
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: 14px;
       cursor: pointer;
+      background-color: #fff;
+      color: #333;
+      transition: all 0.3s ease;
     }
 
-    #commitmentTracker button:hover {
-      background-color: #ffffff55;
+    .tracker-card.dark-mode .toggle-dark {
+      border-color: #fff;
+      background-color: #333;
+      color: white;
     }
   </style>
+</head>
+<body>
 
+<div class="tracker-card" id="trackerCard">
+  <button class="toggle-dark" onclick="toggleDarkMode()">Dark Mode</button>
+  
   <h2>Commitment Tracker</h2>
 
-  <div class="card" id="trackerCard">
-    <div class="settings-icon" onclick="toggleSettings()">
-      <i class="fas fa-cog"></i>
-    </div>
+  <div class="years-display" id="yearsDisplay">👏👏 0 Years 👏👏</div>
 
-    <div class="settings-panel" id="settingsPanel">
-      <input type="datetime-local" id="customStart" />
-      <br />
-      <button onclick="setCustomStart()">Set Start</button>
-      <button onclick="resetStart()">Reset</button>
-      <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+  <div class="unit">
+    <div class="label">
+      <span><i class="fas fa-calendar icon"></i> <span id="monthsLabel">0 Month</span></span>
     </div>
-
-    <div class="years-display" id="yearsDisplay">👏👏 0 Years 👏👏</div>
-
-    <div class="unit">
-      <div class="label">
-        <span><i class="fas fa-calendar icon"></i> <span id="monthsLabel">0 Month</span></span>
-      </div>
-      <div class="bar"><div class="fill month-fill" id="monthBar"></div></div>
-    </div>
-
-    <div class="unit">
-      <div class="label">
-        <span><i class="fas fa-calendar-day icon"></i> <span id="daysLabel">0 Day</span></span>
-      </div>
-      <div class="bar"><div class="fill day-fill" id="dayBar"></div></div>
-    </div>
-
-    <div class="unit">
-      <div class="label">
-        <span><i class="fas fa-clock icon"></i> <span id="hoursLabel">0 Hour</span></span>
-      </div>
-      <div class="bar"><div class="fill hour-fill" id="hourBar"></div></div>
-    </div>
-
-    <div class="unit">
-      <div class="label">
-        <span><i class="fas fa-stopwatch icon"></i> <span id="minutesLabel">0 Minute</span></span>
-      </div>
-      <div class="bar"><div class="fill minute-fill" id="minuteBar"></div></div>
-    </div>
-
-    <div class="unit">
-      <div class="label">
-        <span><i class="fas fa-hourglass-half icon"></i> <span id="secondsLabel">0 Second</span></span>
-      </div>
-      <div class="bar"><div class="fill second-fill" id="secondBar"></div></div>
-    </div>
+    <div class="bar"><div class="fill month-fill" id="monthBar"></div></div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
-  <script>
-    let start = localStorage.getItem("startDate");
-    if (!start) {
-      const now = new Date();
-      localStorage.setItem("startDate", now.toISOString());
-      start = now.toISOString();
-    }
+  <div class="unit">
+    <div class="label">
+      <span><i class="fas fa-calendar-day icon"></i> <span id="daysLabel">0 Day</span></span>
+    </div>
+    <div class="bar"><div class="fill day-fill" id="dayBar"></div></div>
+  </div>
 
-    function updateCounter() {
-      const now = new Date().getTime();
-      const startDate = new Date(start).getTime();
-      let diff = now - startDate;
+  <div class="unit">
+    <div class="label">
+      <span><i class="fas fa-clock icon"></i> <span id="hoursLabel">0 Hour</span></span>
+    </div>
+    <div class="bar"><div class="fill hour-fill" id="hourBar"></div></div>
+  </div>
 
-      const msInMonth = 30 * 24 * 60 * 60 * 1000;
-      let totalMonths = Math.floor(diff / msInMonth);
-      const years = Math.floor(totalMonths / 12);
-      const months = totalMonths % 12;
-      diff %= msInMonth;
+  <div class="unit">
+    <div class="label">
+      <span><i class="fas fa-stopwatch icon"></i> <span id="minutesLabel">0 Minute</span></span>
+    </div>
+    <div class="bar"><div class="fill minute-fill" id="minuteBar"></div></div>
+  </div>
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const dayPercent = (days / 30) * 100;
-      diff %= (1000 * 60 * 60 * 24);
-
-      const hours = Math.floor(diff / (1000 * 60 * 60));
-      const hourPercent = (hours / 24) * 100;
-      diff %= (1000 * 60 * 60);
-
-      const minutes = Math.floor(diff / (1000 * 60));
-      const minutePercent = (minutes / 60) * 100;
-
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-      const secondPercent = (seconds / 60) * 100;
-
-      document.getElementById("yearsDisplay").innerText = `👏👏 ${years} Year${years !== 1 ? 's' : ''} 👏👏`;
-
-      document.getElementById("monthsLabel").innerText = months + " Month";
-      document.getElementById("monthBar").style.width = (months / 12) * 100 + "%";
-
-      document.getElementById("daysLabel").innerText = days + " Day";
-      document.getElementById("dayBar").style.width = dayPercent + "%";
-
-      document.getElementById("hoursLabel").innerText = hours + " Hour";
-      document.getElementById("hourBar").style.width = hourPercent + "%";
-
-      document.getElementById("minutesLabel").innerText = minutes + " Minute";
-      document.getElementById("minuteBar").style.width = minutePercent + "%";
-
-      document.getElementById("secondsLabel").innerText = seconds + " Second";
-      document.getElementById("secondBar").style.width = secondPercent + "%";
-    }
-
-    function toggleSettings() {
-      const panel = document.getElementById("settingsPanel");
-      panel.style.display = panel.style.display === "block" ? "none" : "block";
-    }
-
-    function setCustomStart() {
-      const input = document.getElementById("customStart").value;
-      if (input) {
-        localStorage.setItem("startDate", new Date(input).toISOString());
-        start = new Date(input).toISOString();
-        updateCounter();
-      }
-    }
-
-    function resetStart() {
-      const now = new Date().toISOString();
-      localStorage.setItem("startDate", now);
-      start = now;
-      updateCounter();
-    }
-
-    function toggleDarkMode() {
-      const card = document.getElementById("trackerCard");
-      card.classList.toggle("dark-mode");
-    }
-
-    setInterval(updateCounter, 1000);
-    updateCounter();
-  </script>
+  <div class="unit">
+    <div class="label">
+      <span><i class="fas fa-hourglass-half icon"></i> <span id="secondsLabel">0 Second</span></span>
+    </div>
+    <div class="bar"><div class="fill second-fill" id="secondBar"></div></div>
+  </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+<script>
+  let start = localStorage.getItem("startDate");
+  if (!start) {
+    const now = new Date();
+    localStorage.setItem("startDate", now.toISOString());
+    start = now.toISOString();
+  }
+
+  function updateCounter() {
+    const now = new Date().getTime();
+    const startDate = new Date(start).getTime();
+    let diff = now - startDate;
+
+    const msInMonth = 30 * 24 * 60 * 60 * 1000;
+    let totalMonths = Math.floor(diff / msInMonth);
+    const years = Math.floor(totalMonths / 12);
+    const months = totalMonths % 12;
+    diff %= msInMonth;
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const dayPercent = (days / 30) * 100;
+    diff %= (1000 * 60 * 60 * 24);
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const hourPercent = (hours / 24) * 100;
+    diff %= (1000 * 60 * 60);
+
+    const minutes = Math.floor(diff / (1000 * 60));
+    const minutePercent = (minutes / 60) * 100;
+
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    const secondPercent = (seconds / 60) * 100;
+
+    document.getElementById("yearsDisplay").innerText = `👏👏 ${years} Year${years !== 1 ? 's' : ''} 👏👏`;
+
+    document.getElementById("monthsLabel").innerText = months + " Month";
+    document.getElementById("monthBar").style.width = (months / 12) * 100 + "%";
+
+    document.getElementById("daysLabel").innerText = days + " Day";
+    document.getElementById("dayBar").style.width = dayPercent + "%";
+
+    document.getElementById("hoursLabel").innerText = hours + " Hour";
+    document.getElementById("hourBar").style.width = hourPercent + "%";
+
+    document.getElementById("minutesLabel").innerText = minutes + " Minute";
+    document.getElementById("minuteBar").style.width = minutePercent + "%";
+
+    document.getElementById("secondsLabel").innerText = seconds + " Second";
+    document.getElementById("secondBar").style.width = secondPercent + "%";
+  }
+
+  function toggleDarkMode() {
+    document.getElementById("trackerCard").classList.toggle("dark-mode");
+  }
+
+  setInterval(updateCounter, 1000);
+  updateCounter();
+</script>
+
+</body>
+</html>
