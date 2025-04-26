@@ -148,10 +148,12 @@
       <input type="datetime-local" id="customStart" />
       <button onclick="setCustomStart()">Set Start</button>
       <button onclick="resetStart()">Reset</button>
+      <input type="text" id="newTitle" placeholder="Enter new title" />
+      <button onclick="setCustomTitle()">Change Title</button>
       <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
     </div>
 
-    <h2>Commitment Tracker</h2>
+    <h2 id="mainTitle">Commitment Tracker</h2>
 
     <div class="years-display" id="yearsDisplay">👏👏 0 Years 👏👏</div>
 
@@ -266,6 +268,13 @@
     function toggleDarkMode() {
       const card = document.getElementById("trackerCard");
       card.classList.toggle("dark-mode");
+    }
+
+    function setCustomTitle() {
+      const newTitle = document.getElementById("newTitle").value;
+      if (newTitle) {
+        document.getElementById("mainTitle").innerText = newTitle;
+      }
     }
 
     setInterval(updateCounter, 1000);
